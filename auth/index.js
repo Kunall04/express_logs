@@ -1,8 +1,10 @@
 const express=require('express');
 const app=express();
-const axios=require('axios');
+// const axios=require('axios');
 
 app.use(express.json()); //helps you parse the req's body.
+
+const users=[];
 
 function generateToken() {
   let options = [
@@ -21,46 +23,55 @@ function generateToken() {
   return token;
 }
 
-let users=[];
 
 app.post("/signup", function(req,res) {
     const username=req.body.username;
     const password=req.body.password;
 
-    // if(users.find(u => u.username===username)) {
-    //     res.json({
-    //         message: "already signed in"
-    //     })
-    // }
+    // Validate input
+    if(!username || !password) {
+        return res.status(400).json({
+            message: "username and password are required"
+        });
+    }
+
+    // Check for duplicate username
+    if(users.find(u => u.username===username)) {
+        return res.status(409).json({
+            message: "username already exists"
+        });
+    }
 
     users.push({
         username: username,
         password: password
-    })
+    });
 
-    res.send({
+    res.json({
         message: "signed up"
-    })
-})
+    });
+    console.log(users);
+});
 
-app.post("/signin", function(req,res) {
-    const username=req.body.username;
-    const password=req.body.password;
 
-    const user=users.find(u=> u.username===username && u.password===password);
+app.post("/signin", (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
 
-    if(user){
-        let token=generateToken();
-        user.token=token;
-        res.json({
+    const user = users.find(user => user.username === username && user.password === password);
+
+    if (user) {
+        const token = generateToken();
+        user.token = token;
+        res.send({
             token
         })
         console.log(users);
-    }
-    else 
+    } else {
         res.status(403).send({
-            message: "invalid"
-    })
+            message: "Invalid username or password"
+        })
+    }
 });
 
-app.listen(3001);
+app.listen(3006);
