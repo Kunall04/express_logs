@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Two Numbers</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.6/axios.min.js"></script>
+
+<script>
+    async function sendReq() {
+        const a=document.getElementById("a").value;
+        const b=document.getElementById("b").value;
+
+        const response= await axios.post('/add', {
+            a: a,
+            b: b
+        });
+        document.getElementById("result").innerHTML=response.data.ans;
+    }
+</script>
+
+</head>
+
+<body>
+    <h1>Add Two Numbers</h1>
+    <input type="text" id="a" placeholder="Enter first number"/>
+    <input type="text" id="b" placeholder="Enter second number"/>
+    <button onClick="sendReq()">Add</button>
+    <div id="result"></div>
+</body>
+</html>

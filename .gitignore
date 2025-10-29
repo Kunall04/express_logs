@@ -1,29 +1,7 @@
-# Dependencies
-node_modules/
-package-lock.json
-
-# Logs
-logs
-*.log
-npm-debug.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-
-# Environment variables
-.env
-
-# IDE specific files
-.idea/
-.vscode/
-*.swp
-*.swo
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
+printf "%s\n" \
+"node_modules/" \
+".DS_Store" \
+"npm-debug.log*" \
+"yarn-error.log" \
+".env" \
+ > .gitignore
