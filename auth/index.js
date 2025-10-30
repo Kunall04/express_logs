@@ -30,14 +30,14 @@ app.post("/signup", function(req,res) {
 
     // Validate input
     if(!username || !password) {
-        return res.status(400).json({
+        return res.status(404).json({
             message: "username and password are required"
         });
     }
 
     // Check for duplicate username
     if(users.find(u => u.username===username)) {
-        return res.status(409).json({
+        return res.status(404).json({
             message: "username already exists"
         });
     }
@@ -71,6 +71,22 @@ app.post("/signin", (req, res) => {
         res.status(403).send({
             message: "Invalid username or password"
         })
+    }
+});
+
+app.get("/me", function(req,res) {
+    const token=req.headers.token;
+    const user=users.find(u=> u.token===token);
+
+    if(user) {
+        res.send({
+            username: user.username
+        });
+    }
+    else {
+        res.status(401).send({
+            message: "invalid token/unauthorized"
+        });
     }
 });
 
