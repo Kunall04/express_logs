@@ -102,4 +102,4 @@ app.get("/me", function(req,res) {
 });
 
 
-app.listen(30000);
+app.listen(3000);
