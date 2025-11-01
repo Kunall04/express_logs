@@ -28,6 +28,17 @@
         alert("you are signedin");
     }
 
+    async function getInfo() {
+        const response=await axios.get("http://localhost:3007/me", {
+            headers: {
+                token: localStorage.getItem("token")
+            }
+        })
+        document.getElementById("info").innerHTML=
+        "Username: "+response.data.username+" Password: "+response.data.password
+    }
+    getInfo();
+
 </script>
 
 <body>
@@ -47,7 +58,7 @@
 
     <div>
         User information:
-        <div id="information"></div>
+        <div id="info"></div>
     </div>
 
     <div>
