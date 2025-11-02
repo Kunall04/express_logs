@@ -109,6 +109,4 @@ app.get("/me", logger, auth, function(req,res) {
     }
 });
 
-app.listen(3009, function() {
-    console.log("server at 3007");
-});
+app.listen(3009);
