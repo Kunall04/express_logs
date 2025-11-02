@@ -88,7 +88,7 @@ app.post("/signin", (req, res) => {
     } 
     else {
         res.status(403).send({
-            message: "Invalid username or password"
+            message: "Invalid user"
         })
     }
 });
