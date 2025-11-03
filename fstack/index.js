@@ -103,7 +103,7 @@ app.get("/me", logger, auth, function(req,res) {
         });
     }
     else {
-        res.status(403).send({
+        res.status(401).send({
             message: "not found / unauthorized"
         });
     }
