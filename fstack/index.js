@@ -76,9 +76,9 @@ app.post("/signin", (req, res) => {
 
     if (user) {
         // const token = generateToken();
-        const token=jwt.sign({
+        const token=jwt.verify({
             username: username
-        }, JWT_SECRET)
+        },JWT_SECRET)
 
         // user.token=token;
         res.send({
