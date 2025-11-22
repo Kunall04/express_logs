@@ -44,8 +44,8 @@ app.post('/signin', async function(req, res) {
 
         if(user) {
             const token = jwt.sign({
-                id: user._id
-            }, JWT_SECRET);  // Fixed: added JWT_SECRET as second parameter
+                id: user._id.toString()
+            }, JWT_SECRET);
             
             res.json({
                 token: token
@@ -63,5 +63,49 @@ app.post('/signin', async function(req, res) {
         });
     }
 });
+
+app.post("/todo", auth, async function (req, res) {
+    const userId = req.userId;
+    const title = req.body.title;
+    const done = req.body.done;
+
+    await todomodel.create({
+        userId,
+        title,
+        done,
+    });
+
+    res.json({
+        message: "Todo created",
+    });
+});
+
+app.get("/todo", auth, async function (req, res) {
+    const userId = req.userId;
+
+    const todos = await todomodel.find({
+        userId
+    });
+
+    res.json({
+        todos
+    });
+});
+
+function auth(req,res,next) {
+    const token=req.headers.token;
+
+    const decodeData=jwt.verify(token,JWT_SECRET);
+
+    if(decodeData) {
+        req.userId=decodeData.id;
+        next();
+    }
+    else {
+        res.status(401).json({
+            message: "unauthenticated"
+        });
+    }
+}
 
 app.listen(3007);
