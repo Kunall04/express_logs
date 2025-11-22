@@ -3,6 +3,9 @@ const { usermodel, todomodel } = require('./db.js');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = "nigga leave me alone";
 const app = express();
+const mongoose=require("mongoose");
+
+mongoose.connect('mongodb+srv://admin:nqTRM9DmS50YZYDD@cluster0.d1zoolc.mongodb.net/23nov');
 
 app.use(express.json());
 
