@@ -16,19 +16,14 @@ app.post('/signup', async function(req, res) {
         const name = req.body.name;
 
         await usermodel.insertMany({
-            name: name, 
-            email: email,
-            password: password
+            name,
+            email,
+            password
         });
 
-        res.json({
-            message: "signed up"
-        });
+        res.json({ message: "signed up" });
     } catch (error) {
-        res.status(400).json({
-            message: "Error signing up",
-            error: error.message
-        });
+        res.status(400).json({ message: "Error signing up", error: error.message });
     }
 });
 
@@ -37,10 +32,7 @@ app.post('/signin', async function(req, res) {
         const email = req.body.email;
         const password = req.body.password;
 
-        const user = await usermodel.findOne({
-            email: email,
-            password: password
-        });
+        const user = await usermodel.findOne({ email, password });
 
         if(user) {
             const token = jwt.sign({
@@ -80,7 +72,7 @@ app.post("/todo", auth, async function (req, res) {
     });
 });
 
-app.get("/todo", auth, async function (req, res) {
+app.get("/todos", auth, async function (req, res) {
     const userId = req.userId;
 
     const todos = await todomodel.find({
@@ -88,23 +80,24 @@ app.get("/todo", auth, async function (req, res) {
     });
 
     res.json({
-        todos
+        todos 
     });
 });
 
-function auth(req,res,next) {
-    const token=req.headers.token;
-
-    const decodeData=jwt.verify(token,JWT_SECRET);
-
-    if(decodeData) {
-        req.userId=decodeData.id;
-        next();
+function auth(req, res, next) {
+    const authHeader = req.headers.authorization || req.headers.token;
+    if (!authHeader) {
+        return res.status(401).json({ message: "Missing token" });
     }
-    else {
-        res.status(401).json({
-            message: "unauthenticated"
-        });
+
+    const token = authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1] : authHeader;
+
+    try {
+        const decodeData = jwt.verify(token, JWT_SECRET);
+        req.userId = decodeData.id;
+        next();
+    } catch (err) {
+        return res.status(401).json({ message: "Invalid or expired token" });
     }
 }
 
