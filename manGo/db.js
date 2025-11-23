@@ -21,6 +21,6 @@ const todomodel=mongoose.model('todo',Todo);
 
 //exporting
 module.exports={
-    usermodel,
+    uusermodel,
     todomodel
 }
